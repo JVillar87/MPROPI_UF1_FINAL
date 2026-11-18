@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Tourism Explorer</title>
+</head>
+
+<body>
+
+    <h1>World Tourism Explorer 🌍</h1>
+    <p>Explora las llegadas e ingresos turísticos del mundo.</p>
+
+    <!-- FILTRO POR AÑO -->
+    <form action="/" method="get">
+
+        <label for="anio">Seleccionar año:</label>
+
+        <select name="anio" id="anio">
+            {% for year in anios %}
+            <option value="{{ year }}" {% if year==anio %}selected{% endif %}>
+                {{ year }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filtrar</button>
+
+    </form>
+
+    <!-- TOP 10 LLEGADAS -->
+    <h2>TOP 10 Llegadas turísticas - {{ anio }}</h2>
+
+    <ol>
+        {% for pais in top_llegadas %}
+        <li>
+            {{ pais.pais }} -
+            {{ "%.2f"|format(pais.llegadas_miles / 1000) }}
+            millones de turistas
+        </li>
+        {% endfor %}
+    </ol>
+
+    <!-- TOP 10 INGRESOS -->
+    <h2>TOP 10 Ingresos turísticos - {{ anio }}</h2>
+
+    <ol>
+        {% for pais in top_ingresos %}
+        <li>
+            {{ pais.pais }} -
+            {{ "%.2f"|format(pais.ingresos_millones_usd / 1000) }}
+            mil millones USD
+        </li>
+        {% endfor %}
+    </ol>
+
+</body>
+
+</html>
