@@ -5,6 +5,7 @@ from pathlib import Path
 
 def load_data():
 
+    # CARGA Y LIMPIEZA DE DATOS
     ruta = Path(__file__).resolve().parent.parent / "data" / "turismo_limpio.csv"
 
     datos = []
@@ -14,17 +15,23 @@ def load_data():
 
         for fila in lector:
 
-            #COMPROBAR CAMPOS CON DATOS (SIN VACÍOS)
-            if (fila["pais"].strip() != "" and
-                fila["anio"].strip() != "" and
-                fila["llegadas_miles"].strip() != "" and
-                fila["ingresos_millones_usd"].strip() != ""):
+            # COMPROBAR PAÍS Y AÑO
+            if fila["pais"].strip() != "" and fila["anio"].strip() != "":
 
-                #CONVERTIR A INT/FLOAT
                 try:
+                    # CONVERTIR EL AÑO A ENTERO
                     fila["anio"] = int(fila["anio"])
-                    fila["llegadas_miles"] = float(fila["llegadas_miles"])
-                    fila["ingresos_millones_usd"] = float(fila["ingresos_millones_usd"])
+
+                    # CONVERTIR LOS INDICADORES SI TIENEN DATOS
+                    if fila["llegadas_miles"].strip() != "":
+                        fila["llegadas_miles"] = float(fila["llegadas_miles"])
+                    else:
+                        fila["llegadas_miles"] = None
+
+                    if fila["ingresos_millones_usd"].strip() != "":
+                        fila["ingresos_millones_usd"] = float(fila["ingresos_millones_usd"])
+                    else:
+                        fila["ingresos_millones_usd"] = None
 
                     datos.append(fila)
 
@@ -33,24 +40,23 @@ def load_data():
 
     return datos
 
-
-def get_top_10(datos, anio, columna):
-
-    #FILTRAR POR AÑO
+ 
+def get_data_by_year(datos, anio, columna, orden, limite):
+    # FILTRAR POR AÑO
     filtrados = []
 
     for fila in datos:
-        if fila["anio"] == anio:
+        if fila["anio"] == anio and fila[columna] is not None:
             filtrados.append(fila)
 
-    #ORDENAR DE MAYOR A MENOR
+    # ORDENAR LOS RESULTADOS
     filtrados.sort(
         key=lambda fila: fila[columna],
-        reverse=True
+        reverse=(orden == "desc")
     )
 
-    #DEVOLVER LOS 10 PRIMEROS
-    return filtrados[:10]
+    # DEVOLVER LA CANTIDAD SOLICITADA
+    return filtrados[:limite]
 
 
 def get_years(datos):

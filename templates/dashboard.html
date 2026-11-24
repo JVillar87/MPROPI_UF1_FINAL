@@ -5,55 +5,195 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>World Tourism Explorer</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
 
-    <h1>World Tourism Explorer 🌍</h1>
-    <p>Explora las llegadas e ingresos turísticos del mundo.</p>
+    <div class="contenedor">
 
-    <!-- FILTRO POR AÑO -->
-    <form action="/" method="get">
+        <!-- CABECERA -->
+        <header>
+            <h1>World Tourism Explorer</h1>
+            <p>Explora y compara el turismo internacional.</p>
+        </header>
 
-        <label for="anio">Seleccionar año:</label>
+        <!-- SELECTOR DE AÑOS -->
+        <section class="filtros">
 
-        <select name="anio" id="anio">
-            {% for year in anios %}
-            <option value="{{ year }}" {% if year==anio %}selected{% endif %}>
-                {{ year }}
-            </option>
-            {% endfor %}
-        </select>
+            <h2>COMPARADOR AÑOS</h2>
+            <p>
+                Selecciona dos años para comparar las llegadas de turistas
+                internacionales y los ingresos turísticos de diferentes países.
+            </p>
+            <form action="/" method="get">
 
-        <button type="submit">Filtrar</button>
+                <label for="year_1">Primer año:</label>
 
-    </form>
+                <select name="year_1" id="year_1">
+                    <!-- JINJA: MOSTRAR LOS AÑOS DISPONIBLES -->
+                    {% for year in years %}
+                    <option value="{{ year }}" {% if year==year_1 %}selected{% endif %}>
+                        {{ year }}
+                    </option>
+                    {% endfor %}
+                </select>
 
-    <!-- TOP 10 LLEGADAS -->
-    <h2>TOP 10 Llegadas turísticas - {{ anio }}</h2>
+                <label for="year_2">Segundo año:</label>
 
-    <ol>
-        {% for pais in top_llegadas %}
-        <li>
-            {{ pais.pais }} -
-            {{ "%.2f"|format(pais.llegadas_miles / 1000) }}
-            millones de turistas
-        </li>
-        {% endfor %}
-    </ol>
+                <select name="year_2" id="year_2">
+                    <!-- JINJA: MOSTRAR LOS AÑOS DISPONIBLES -->
+                    {% for year in years %}
+                    <option value="{{ year }}" {% if year==year_2 %}selected{% endif %}>
+                        {{ year }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <label for="orden">Orden:</label>
+                <select name="orden" id="orden">
+                    <option value="desc" {% if orden == "desc" %}selected{% endif %}>
+                        Mayor a menor
+                    </option>
+                    <option value="asc" {% if orden == "asc" %}selected{% endif %}>
+                        Menor a mayor
+                    </option>
+                </select>
+                <button type="submit">Comparar</button>
 
-    <!-- TOP 10 INGRESOS -->
-    <h2>TOP 10 Ingresos turísticos - {{ anio }}</h2>
+            </form>
 
-    <ol>
-        {% for pais in top_ingresos %}
-        <li>
-            {{ pais.pais }} -
-            {{ "%.2f"|format(pais.ingresos_millones_usd / 1000) }}
-            mil millones USD
-        </li>
-        {% endfor %}
-    </ol>
+        </section>
+
+        <!-- LLEGADAS TURÍSTICAS -->
+        <section>
+            <h2>LLEGADAS TURÍSTICAS</h2>
+            
+                <div class="panel-contenido">
+            
+                    <!-- RANKINGS -->
+                    <div class="rankings">
+            
+                        <div class="tarjeta">
+                            <h3>TOP 5 - {{ year_1 }}</h3>
+            
+                            <ol>
+                                {% for pais in arrivals_1 %}
+                                <li>
+                                    <span>{{ pais.pais }}</span>
+                                    <strong>{{ "%.2f"|format(pais.llegadas_miles / 1000) }} M</strong>
+                                </li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+            
+                        <div class="tarjeta">
+                            <h3>TOP 5 - {{ year_2 }}</h3>
+            
+                            <ol>
+                                {% for pais in arrivals_2 %}
+                                <li>
+                                    <span>{{ pais.pais }}</span>
+                                    <strong>{{ "%.2f"|format(pais.llegadas_miles / 1000) }} M</strong>
+                                </li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+            
+                    </div>
+            
+                    <!-- GRÁFICOS DE LLEGADAS -->
+                    <div class="graficos">
+            
+                        <div class="tarjeta">
+                            <h3>{{ year_1 }}</h3>
+                            <img src="data:image/png;base64,{{ graph_arrivals_1 }}" alt="Gráfico de llegadas de {{ year_1 }}">
+                        </div>
+            
+                        <div class="tarjeta">
+                            <h3>{{ year_2 }}</h3>
+                            <img src="data:image/png;base64,{{ graph_arrivals_2 }}" alt="Gráfico de llegadas de {{ year_2 }}">
+                        </div>
+            
+                    </div>
+            
+                </div>
+            
+                <p class="nota">M = millones de llegadas turísticas.</p>
+            
+                <p class="nota">
+                    Los porcentajes muestran qué parte de las llegadas suman los cinco países del gráfico, no del total mundial.
+                </p>
+
+        </section>
+
+        <!-- INGRESOS TURÍSTICOS -->
+        <section class="panel panel-invertido">
+        
+            <h2>INGRESOS TURÍSTICOS</h2>
+        
+            <div class="panel-contenido">
+        
+                <!-- RANKINGS -->
+                <div class="rankings">
+        
+                    <div class="tarjeta">
+                        <h3>TOP 5 - {{ year_1 }}</h3>
+        
+                        <ol>
+                            {% for pais in ingresos_1 %}
+                            <li>
+                                <span>{{ pais.pais }}</span>
+                                <strong>{{ "%.2f"|format(pais.ingresos_millones_usd / 1000) }}</strong>
+                            </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+        
+                    <div class="tarjeta">
+                        <h3>TOP 5 - {{ year_2 }}</h3>
+        
+                        <ol>
+                            {% for pais in ingresos_2 %}
+                            <li>
+                                <span>{{ pais.pais }}</span>
+                                <strong>{{ "%.2f"|format(pais.ingresos_millones_usd / 1000) }}</strong>
+                            </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+        
+                </div>
+        
+                <!-- GRÁFICOS DE INGRESOS -->
+                <div class="graficos">
+        
+                    <div class="tarjeta">
+                        <h3>{{ year_1 }}</h3>
+                        <img src="data:image/png;base64,{{ graph_ingresos_1 }}" alt="Gráfico de ingresos de {{ year_1 }}">
+                    </div>
+        
+                    <div class="tarjeta">
+                        <h3>{{ year_2 }}</h3>
+                        <img src="data:image/png;base64,{{ graph_ingresos_2 }}" alt="Gráfico de ingresos de {{ year_2 }}">
+                    </div>
+        
+                </div>
+        
+            </div>
+        
+            <p class="nota">Cifras en miles de millones de USD.</p>
+        
+            <p class="nota">
+                Los porcentajes muestran qué parte de los ingresos suman los cinco países del gráfico, no del total mundial.
+            </p>
+        </section>
+
+        <footer>
+            World Tourism Explorer · Proyecto DAW
+        </footer>
+
+    </div>
 
 </body>
 
