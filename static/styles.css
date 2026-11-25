@@ -232,6 +232,21 @@ footer {
     border-top: 1px solid var(--linea);
 }
 
+.fuente {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #8b949e;
+}
+
+.fuente a {
+    color: #58a6ff;
+    text-decoration: none;
+}
+
+.fuente a:hover {
+    text-decoration: underline;
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 800px) {
