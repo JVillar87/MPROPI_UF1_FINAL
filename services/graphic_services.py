@@ -33,21 +33,22 @@ def create_graph(data, column, title):
     if column == "llegadas_miles": 
         # Colores llegadas
         colores = [
-            "#58A6FF",
-            "#8B7CF6",
-            "#40BFAF",
-            "#D38FE8",
-            "#4389BD"
-        ]
+        "#5EC8B8",
+        "#4289B5",
+        "#B49AE5",
+        "#E6B66D",
+        "#D87998"
+    ]
     else:
         # Colores ingresos
         colores = [
-            "#5EC8B8",
-            "#4289B5",
-            "#B49AE5",
-            "#E6B66D",
-            "#D87998"
+            "#F2A98A",
+            "#C9A4D8",
+            "#E7C77B",
+            "#91BDA5",
+            "#D88DA8"
         ]
+    
 
     # CREAR GRÁFICO CIRCULAR
     axis.pie(
