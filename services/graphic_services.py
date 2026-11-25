@@ -52,6 +52,7 @@ def create_graph(data, column, title):
     # CREAR GRÁFICO CIRCULAR
     axis.pie(
         values,
+        colors=colores, 
         labels=countries,
         autopct="%1.1f%%",
         startangle=90,
