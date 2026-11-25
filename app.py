@@ -57,7 +57,7 @@ def dashboard():
         f"TOP 5 Ingresos turísticos - {year_1}"
     )
 
-    # GRÁFICO DE INGRESOS TURÍSTICOS - SEGUNDO AÑO
+    # GRÁFICO DE INGRESOS TURÍSTICOS - SEGUNDO AÑOs
     graph_ingresos_2 = create_graph(
         ingresos_2,
         "ingresos_millones_usd",
